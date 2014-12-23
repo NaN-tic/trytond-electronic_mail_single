@@ -1,0 +1,23 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:electronic.mail.template,reply_to:"
+msgid "Reply To"
+msgstr "Respondre a"
+
+msgctxt "field:electronic.mail.template,single_email:"
+msgid "Single email"
+msgstr "Correu electrònic únic"
+
+msgctxt "help:electronic.mail.template,single_email:"
+msgid ""
+"Check it if you want to send a single email for several records (the "
+"optional attachment will be generated as a single file for all these "
+"records). If you don't check it, an email with its optional attachment will "
+"be send for each record."
+msgstr ""
+"Marqueu aquesta casella si voleu enviar un únic correu electrònic per varis "
+"registres (l'adjunt opcional es generarà com un únic arxiu per a tots "
+"aquests registres). Si no la marqueu, s'enviarà un correu electrònic amb els"
+" adjunts opcionals per cada registre. "
