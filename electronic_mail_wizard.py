@@ -136,7 +136,8 @@ class GenerateTemplateEmail:
     def send_email(self, message, record):
         start = self.start
         template = start.template
-        context = {}
+        company_id = Transaction().context.get('company')
+        context = {'company': company_id}
         if start.bcc:
             context['bcc'] = start.bcc
         db_name = Transaction().cursor.dbname
@@ -151,15 +152,17 @@ class GenerateTemplateEmail:
             pool = Pool()
             Email = pool.get('electronic.mail')
             Template = pool.get('electronic.mail.template')
+            EmailConfiguration = pool.get('electronic.mail.configuration')
+            with transaction.set_context(**context):
+                email_configuration = EmailConfiguration(1)
+            mailbox = email_configuration.outbox
 
             template = Template(template_id)
-            email = Email.create_from_email(
-                message, template.mailbox.id, context)
+            email = Email.create_from_email(message, mailbox.id, context)
 
-            Template.send_email(email, template)
+            email.send_email()
             logging.getLogger('Mail').info(
                 'Send template email: %s - %s' % (template.name, email.id))
 
-            Pool().get('electronic.mail.template').add_event(template, record,
-                email, message)
+            template.add_event(record, email)
             transaction.cursor.commit()
