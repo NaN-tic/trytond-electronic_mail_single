@@ -88,8 +88,7 @@ class GenerateTemplateEmail:
 
         with Transaction().set_context(language=language):
             template = Template(template.id)
-            if template.create_message_id:
-                message['message_id'] = make_msgid()
+            message['message_id'] = make_msgid()
 
             message['from'] = template.eval(start.from_, record)
             message['to'] = template.eval(start.to, record)
