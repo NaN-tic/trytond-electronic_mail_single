@@ -33,7 +33,7 @@ class GenerateTemplateEmail:
         emails = set()
         for record in records:
             for field in start._fields:
-                if field in email_fields:
+                if field in email_fields and getattr(start, field, False):
                     emails.update(
                         template.eval(getattr(start, field), record).split(',')
                         )
