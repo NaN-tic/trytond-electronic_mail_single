@@ -158,7 +158,7 @@ class GenerateTemplateEmail:
             mailbox = email_configuration.outbox
 
             template = Template(template_id)
-            email = Email.create_from_email(message, mailbox.id, context)
+            email = Email.create_from_email(message, mailbox, context)
 
             email.send_email()
             logging.getLogger('Mail').info(
