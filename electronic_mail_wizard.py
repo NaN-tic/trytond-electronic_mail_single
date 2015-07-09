@@ -1,14 +1,7 @@
 # This file is part of the electronic_mail_single module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from email import Encoders
-from email.header import Header
-from email.mime.base import MIMEBase
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.utils import formatdate, make_msgid
 import logging
-import mimetypes
 import threading
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -38,48 +31,6 @@ class GenerateTemplateEmail:
                         template.eval(getattr(start, field), record).split(',')
                         )
         Mail.validate_emails(emails)
-
-    def render_message(self, record, attachments):
-        start = self.start
-        template = start.template
-        Template = Pool().get('electronic.mail.template')
-
-        message = MIMEMultipart()
-        message['date'] = formatdate(localtime=1)
-
-        language = Transaction().context.get('language', 'en_US')
-        if template.language:
-            language = template.eval(template.language, record)
-
-        with Transaction().set_context(language=language):
-            template = Template(template.id)
-            message['message_id'] = make_msgid()
-
-            message['from'] = template.eval(start.from_, record)
-            message['to'] = template.eval(start.to, record)
-            message['cc'] = template.eval(start.cc, record)
-            message['subject'] = Header(template.eval(start.subject,
-                    record), 'utf-8')
-
-            if template.reply_to:
-                eval_result = template.eval(template.reply_to, record)
-                if eval_result:
-                    message['reply-to'] = eval_result
-            if attachments:
-                message.set_payload(attachments)
-
-            plain = template.eval(start.plain, record)
-            if template.signature:
-                User = Pool().get('res.user')
-                user = User(Transaction().user)
-                if user.signature:
-                    signature = user.signature
-                    plain = '%s\n--\n%s' % (
-                            plain,
-                            signature.encode("utf8"),
-                            )
-            message.attach(MIMEText(plain, _charset='utf-8'))
-        return message
 
     def transition_send(self):
         start = self.start
