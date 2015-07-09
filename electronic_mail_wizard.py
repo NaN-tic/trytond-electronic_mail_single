@@ -39,17 +39,6 @@ class GenerateTemplateEmail:
                         )
         Mail.validate_emails(emails)
 
-    def group_records(self, records):
-        start = self.start
-        template = start.template
-        groups = {}
-        for r in records:
-            if template.eval(getattr(start, 'to'), r) not in groups:
-                groups[template.eval(getattr(start, 'to'), r)] = [r]
-            else:
-                groups[template.eval(getattr(start, 'to'), r)].append(r)
-        return [groups[g] for g in groups]
-
     def get_attachments(self, ids):
         start = self.start
         template = start.template
@@ -126,7 +115,7 @@ class GenerateTemplateEmail:
             super(GenerateTemplateEmail, self).transition_send()
         else:
             self.validate_emails()
-            for records in self.group_records(records):
+            for records in template.group_records(records):
                 record = records[0]
                 attachments = self.get_attachments([r.id for r in records])
                 message = self.render_message(record, attachments)

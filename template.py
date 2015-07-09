@@ -16,3 +16,12 @@ class Template:
             '(the optional attachment will be generated as a single file for '
             'all these records). If you don\'t check it, an email with its '
             'optional attachment will be send for each record.')
+
+    def group_records(self, records):
+        groups = {}
+        for r in records:
+            if self.eval(getattr(self, 'to'), r) not in groups:
+                groups[self.eval(getattr(self, 'to'), r)] = [r]
+            else:
+                groups[self.eval(getattr(self, 'to'), r)].append(r)
+        return [groups[g] for g in groups]
