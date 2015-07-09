@@ -39,30 +39,6 @@ class GenerateTemplateEmail:
                         )
         Mail.validate_emails(emails)
 
-    def get_attachments(self, ids):
-        start = self.start
-        template = start.template
-        attachments = []
-        for report in template.reports:
-            report = Pool().get(report.report_name, type='report')
-            ext, data, filename, file_name = report.execute(ids, {})
-
-            if file_name:
-                filename = template.eval(file_name, ids)
-            filename = ext and '%s.%s' % (filename, ext) or filename
-            content_type, _ = mimetypes.guess_type(filename)
-            maintype, subtype = (
-                content_type or 'application/octet-stream'
-                ).split('/', 1)
-
-            attachment = MIMEBase(maintype, subtype)
-            attachment.set_payload(data)
-            Encoders.encode_base64(attachment)
-            attachment.add_header(
-                'Content-Disposition', 'attachment', filename=filename)
-            attachments.append(attachment)
-        return attachments
-
     def render_message(self, record, attachments):
         start = self.start
         template = start.template
@@ -117,7 +93,7 @@ class GenerateTemplateEmail:
             self.validate_emails()
             for records in template.group_records(records):
                 record = records[0]
-                attachments = self.get_attachments([r.id for r in records])
+                attachments = template.get_attachments(records)
                 message = self.render_message(record, attachments)
                 self.send_email(message, record)
         return 'end'
