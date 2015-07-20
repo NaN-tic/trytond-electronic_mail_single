@@ -1,13 +1,10 @@
 # This file is part of the electronic_mail_single module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from email import Encoders
 from email.header import Header
-from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate, make_msgid
-import mimetypes
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 
