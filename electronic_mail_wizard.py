@@ -6,9 +6,10 @@ import threading
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
-
 __all__ = ['GenerateTemplateEmail']
 __metaclass__ = PoolMeta
+
+logger = logging.getLogger(__name__)
 
 
 class GenerateTemplateEmail:
@@ -77,8 +78,8 @@ class GenerateTemplateEmail:
             email = Email.create_from_email(message, mailbox, context)
 
             email.send_email()
-            logging.getLogger('Mail').info(
-                'Send template email: %s - %s' % (template.name, email.id))
+            logger.info('Send template email: %s - %s' % (
+                template.name, email.id))
 
             template.add_event(record, email)
             transaction.cursor.commit()
