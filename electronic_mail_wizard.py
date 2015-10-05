@@ -45,7 +45,7 @@ class GenerateTemplateEmail:
             for records in template.group_records(records):
                 record = records[0]
                 attachments = template.get_attachments(records)
-                message = self.render_message(record, attachments)
+                message = template.render_message(record, attachments)
                 self.send_email(message, record)
         return 'end'
 
@@ -69,16 +69,17 @@ class GenerateTemplateEmail:
             Email = pool.get('electronic.mail')
             Template = pool.get('electronic.mail.template')
             EmailConfiguration = pool.get('electronic.mail.configuration')
-            with transaction.set_context(**context):
-                email_configuration = EmailConfiguration(1)
+
+            email_configuration = EmailConfiguration(1)
             mailbox = email_configuration.outbox
 
             template = Template(template_id)
             email = Email.create_from_email(message, mailbox, context)
 
-            email.send_email()
-            logging.getLogger('Mail').info(
-                'Send template email: %s - %s' % (template.name, email.id))
+            if email:
+                email.send_email()
+                logging.getLogger('Mail').info(
+                    'Send template email: %s - %s' % (template.name, email.id))
 
-            template.add_event(record, email)
-            transaction.cursor.commit()
+                template.add_event(record, email)
+                transaction.cursor.commit()
