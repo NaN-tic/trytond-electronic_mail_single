@@ -82,5 +82,10 @@ class GenerateTemplateEmail:
                 logger.info('Send template email: %s - %s' % (
                     template.name, email.id))
 
-                template.add_event(record, email)
+                Template.add_activities([{
+                    'record': record,
+                    'template': template,
+                    'mail': email,
+                    }])  # add activities
+
                 transaction.cursor.commit()
