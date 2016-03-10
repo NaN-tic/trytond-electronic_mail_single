@@ -57,7 +57,7 @@ class GenerateTemplateEmail:
         context = {'company': company_id}
         if start.bcc:
             context['bcc'] = start.bcc
-        db_name = Transaction().cursor.dbname
+        db_name = Transaction().database.name
         uid = Transaction().user
         thread1 = threading.Thread(target=self.send_email_thread,
             args=(db_name, uid, message, record, template.id, context))
