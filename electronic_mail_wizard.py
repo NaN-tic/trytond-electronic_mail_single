@@ -88,4 +88,4 @@ class GenerateTemplateEmail:
                     'mail': email,
                     }])  # add activities
 
-                transaction.cursor.commit()
+                transaction.commit()
