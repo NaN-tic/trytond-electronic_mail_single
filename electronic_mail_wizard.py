@@ -7,12 +7,12 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
 __all__ = ['GenerateTemplateEmail']
-__metaclass__ = PoolMeta
 
 logger = logging.getLogger(__name__)
 
 
 class GenerateTemplateEmail:
+    __metaclass__ = PoolMeta
     __name__ = "electronic_mail_wizard.templateemail"
 
     def validate_emails(self):
