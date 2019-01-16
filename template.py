@@ -14,8 +14,7 @@ from trytond.transaction import Transaction
 __all__ = ['Template']
 
 
-class Template:
-    __metaclass__ = PoolMeta
+class Template(metaclass=PoolMeta):
     __name__ = 'electronic.mail.template'
 
     single_email = fields.Boolean('Single email',

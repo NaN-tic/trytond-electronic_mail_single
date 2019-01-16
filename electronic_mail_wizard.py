@@ -11,8 +11,7 @@ __all__ = ['GenerateTemplateEmail']
 logger = logging.getLogger(__name__)
 
 
-class GenerateTemplateEmail:
-    __metaclass__ = PoolMeta
+class GenerateTemplateEmail(metaclass=PoolMeta):
     __name__ = "electronic_mail_wizard.templateemail"
 
     def validate_emails(self):
