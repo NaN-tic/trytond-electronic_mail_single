@@ -1,10 +1,6 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "field:electronic.mail.template,reply_to:"
-msgid "Reply To"
-msgstr "Respondre a"
 
 msgctxt "field:electronic.mail.template,single_email:"
 msgid "Single email"
