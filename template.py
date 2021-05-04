@@ -49,10 +49,10 @@ class Template(metaclass=PoolMeta):
             message['subject'] = Header(self.eval(self.subject, record),
                 'utf-8')
 
-            if self.reply_to:
-                eval_result = self.eval(self.reply_to, record)
+            if self.in_reply_to:
+                eval_result = self.eval(self.in_reply_to, record)
                 if eval_result:
-                    message['reply-to'] = eval_result
+                    message['In-Reply-To'] = eval_result
             if attachments:
                 message.set_payload(attachments)
 
