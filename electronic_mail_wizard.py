@@ -33,11 +33,16 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
         Mail.validate_emails(emails)
 
     def transition_send(self):
+        context = Transaction().context
+        active_ids = context.get('active_ids', [])
+        if not active_ids:
+            return 'end'
+
         start = self.start
         template = start.template
         Model = Pool().get(template.model.model)
 
-        records = Model.browse(Transaction().context.get('active_ids'))
+        records = Model.browse(active_ids)
         if not template.single_email:
             super(GenerateTemplateEmail, self).transition_send()
         else:
