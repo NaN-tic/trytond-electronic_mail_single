@@ -41,6 +41,8 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
         if template_id:
             template = Template(template_id)
             default['mail_single'] = template.single_email
+            if template.single_email:
+                default['use_tmpl_fields'] = True
         return default
 
     def validate_emails(self):
