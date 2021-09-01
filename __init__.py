@@ -9,6 +9,7 @@ from . import electronic_mail_wizard
 def register():
     Pool.register(
         template.Template,
+        electronic_mail_wizard.TemplateEmailStart,
         module='electronic_mail_single', type_='model')
     Pool.register(
         electronic_mail_wizard.GenerateTemplateEmail,
