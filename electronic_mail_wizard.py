@@ -20,7 +20,7 @@ class TemplateEmailStart(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(TemplateEmailStart, cls).__setup__()
-        # dissable edit fields when is mail single
+        # disable edit fields when is mail single
         for field in ('from_', 'sender', 'to', 'cc', 'bcc', 'use_tmpl_fields'):
             field_ = getattr(cls, field)
             if field_.states.get('readonly'):
