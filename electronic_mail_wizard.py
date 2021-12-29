@@ -113,7 +113,8 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
                         if file_name:
                             filename = template.eval(file_name, record)
                         filename = unaccent(filename)
-                        filename = ext and '%s.%s' % (filename, ext) or filename
+                        filename = (ext and '%s.%s' % (filename, ext) or
+                            filename)
                         content_type, _ = mimetypes.guess_type(filename)
                         maintype, subtype = (
                             content_type or 'application/octet-stream'
@@ -123,13 +124,16 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
                         attachment.set_payload(data)
                         encoders.encode_base64(attachment)
                         attachment.add_header(
-                            'Content-Disposition', 'attachment', filename=filename)
+                            'Content-Disposition', 'attachment',
+                            filename=filename)
                         message.attach(attachment)
 
                 electronic_mail = ElectronicEmail.create_from_mail(message,
                     template.mailbox.id)
                 if not electronic_mail:
                     continue
+                electronic_mail.template = template
+                electronic_mail.save()
 
                 with Transaction().set_context(
                         queue_name='electronic_mail',
