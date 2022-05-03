@@ -27,7 +27,7 @@ class TemplateEmailStart(metaclass=PoolMeta):
                 field_.states['readonly'] |= Eval('mail_single')
             else:
                 field_.states['readonly'] = Eval('mail_single')
-            field_.depends.append('mail_single')
+            field_.depends.add('mail_single')
 
 
 class GenerateTemplateEmail(metaclass=PoolMeta):
