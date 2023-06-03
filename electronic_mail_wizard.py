@@ -4,6 +4,7 @@
 import mimetypes
 from email import encoders
 from email.mime.base import MIMEBase
+from trytond.config import config
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
 from trytond.pyson import Eval
@@ -11,6 +12,8 @@ from trytond.transaction import Transaction
 from trytond.modules.electronic_mail_template.tools import unaccent
 
 __all__ = ['TemplateEmailStart', 'GenerateTemplateEmail']
+
+QUEUE_NAME = config.get('electronic_mail', 'queue_name', default='default')
 
 
 class TemplateEmailStart(metaclass=PoolMeta):
@@ -136,7 +139,7 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
                 electronic_mail.save()
 
                 with Transaction().set_context(
-                        queue_name='electronic_mail',
+                        queue_name=QUEUE_NAME,
                         queue_scheduled_at=config.send_email_after):
                     ElectronicEmail.__queue__.send_mail([electronic_mail])
 
