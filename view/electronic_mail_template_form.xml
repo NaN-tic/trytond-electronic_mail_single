@@ -7,5 +7,7 @@ copyright notices and license terms. -->
             position="after">
         <label name="single_email"/>
         <field name="single_email"/>
+        <label name="single_report"/>
+        <field name="single_report"/>
     </xpath>
 </data>

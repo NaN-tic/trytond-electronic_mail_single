@@ -19,6 +19,7 @@ QUEUE_NAME = config.get('electronic_mail', 'queue_name', default='default')
 class TemplateEmailStart(metaclass=PoolMeta):
     __name__ = 'electronic.mail.wizard.templateemail.start'
     mail_single = fields.Boolean('Mail Single', readonly=True)
+    report_single = fields.Boolean('Report Single', readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -44,6 +45,7 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
         if template_id:
             template = Template(template_id)
             default['mail_single'] = template.single_email
+            default['report_single'] = template.single_report
             if template.single_email:
                 default['use_tmpl_fields'] = True
         return default
@@ -103,13 +105,17 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
                 for field_name in tmpl_fields:
                     values[field_name] = getattr(template, field_name)
 
-                message = Template.render(template, record, values)
+                message = Template.render(template, record, values,
+                    render_report=False)
 
                 # Attach reports
                 if template.reports:
                     reports = []
-                    for record in records[1:]:
-                        reports += Template.render_reports(template, record)
+                    if template.single_report:
+                        reports += Template.render_reports(template, records)
+                    else:
+                        for record in records:
+                            reports += Template.render_reports(template, record)
 
                     for report in reports:
                         ext, data, filename, file_name = report[0:5]
