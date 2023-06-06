@@ -3,6 +3,7 @@
 # copyright notices and license terms.
 from trytond.model import fields
 from trytond.pool import PoolMeta
+from trytond.pyson import Bool, Eval
 
 __all__ = ['Template']
 
@@ -10,11 +11,13 @@ __all__ = ['Template']
 class Template(metaclass=PoolMeta):
     __name__ = 'electronic.mail.template'
 
-    single_email = fields.Boolean('Single email',
-        help='Check it if you want to send a single email for several records '
-            '(the optional attachment will be generated as a single file for '
-            'all these records). If you don\'t check it, an email with its '
-            'optional attachment will be send for each record.')
+    single_email = fields.Boolean('Single Email',
+        help='Check it if you want to send a single email for several records')
+    single_report = fields.Boolean('Single Report',
+        states={
+            'invisible': ~Bool(Eval('single_email')),
+        },
+        help='Check it if you want to send a single report for several records')
 
     def group_records(self, records):
         groups = {}
