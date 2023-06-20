@@ -85,6 +85,13 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
         template = start.template
         Model = Pool().get(template.model.model)
 
+        def _render_file_name(report):
+            report = list(report)
+            file_name = report[3]
+            if file_name:
+                report[3] = unaccent(template.eval(file_name, record))
+            return [tuple(report)]
+
         records = Model.browse(active_ids)
         if not template.single_email:
             super(GenerateTemplateEmail, self).transition_send()
@@ -112,17 +119,16 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
                 if template.reports:
                     reports = []
                     if template.single_report:
-                        reports += Template.render_reports(template, records)
+                        for report in Template.render_reports(template, records):
+                            reports += _render_file_name(report)
                     else:
                         for record in records:
-                            reports += Template.render_reports(template, record)
+                            for report in Template.render_reports(template, record):
+                                reports += _render_file_name(report)
 
                     for report in reports:
                         ext, data, filename, file_name = report[0:5]
-                        if file_name:
-                            filename = template.eval(file_name, record)
-                        filename = unaccent(filename)
-                        filename = (ext and '%s.%s' % (filename, ext) or
+                        filename = (ext and '%s.%s' % (file_name or filename, ext) or
                             filename)
                         content_type, _ = mimetypes.guess_type(filename)
                         maintype, subtype = (
