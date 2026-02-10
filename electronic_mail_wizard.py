@@ -108,7 +108,7 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
 
                 values = {'template': template}
                 tmpl_fields = ('from_', 'sender', 'to', 'cc', 'bcc', 'subject',
-                    'message_id', 'in_reply_to', 'plain', 'html')
+                    'message_id', 'in_reply_to', 'markdown')
                 for field_name in tmpl_fields:
                     values[field_name] = getattr(template, field_name)
 
