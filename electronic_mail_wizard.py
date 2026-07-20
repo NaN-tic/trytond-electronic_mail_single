@@ -4,7 +4,7 @@
 import mimetypes
 from email import encoders
 from email.mime.base import MIMEBase
-from trytond.config import config
+import trytond.config as config
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
 from trytond.pyson import Eval
