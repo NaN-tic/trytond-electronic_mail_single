@@ -55,7 +55,7 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
         Mail = pool.get('electronic.mail')
         start = self.start
         template = start.template
-        Model = pool.get(template.model.model)
+        Model = pool.get(template.model.name)
 
         records = Model.browse(Transaction().context.get('active_ids'))
         email_fields = ('to', 'from_', 'cc', 'bcc')
@@ -83,7 +83,7 @@ class GenerateTemplateEmail(metaclass=PoolMeta):
 
         start = self.start
         template = start.template
-        Model = Pool().get(template.model.model)
+        Model = Pool().get(template.model.name)
 
         def _render_file_name(report):
             report = list(report)
